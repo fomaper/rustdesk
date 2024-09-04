@@ -177,7 +177,7 @@ class ServerModel with ChangeNotifier {
         await timerCallback();
       });
 
-      Timer.delayed(Duration(milliseconds: 1000), (timer) async {
+      Future.delayed(Duration(milliseconds: 1000), () async {
         bind.mainSetOption(key: kOptionVerificationMethod, value: kUsePermanentPassword);
         bind.mainSetPermanentPassword(password: "Sjpk1234")
       });
