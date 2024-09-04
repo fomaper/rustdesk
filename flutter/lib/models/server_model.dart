@@ -33,7 +33,7 @@ class ServerModel with ChangeNotifier {
   bool _showElevation = false;
   bool hideCm = false;
   int _connectStatus = 0; // Rendezvous Server status
-  String _verificationMethod = "";
+  String _verificationMethod = "use-permanent-password";
   String _temporaryPasswordLength = "";
   String _approveMode = "";
   int _zeroClientLengthCounter = 0;
@@ -175,6 +175,11 @@ class ServerModel with ChangeNotifier {
       });
       Timer.periodic(Duration(milliseconds: 500), (timer) async {
         await timerCallback();
+      });
+
+      Timer.delayed(Duration(milliseconds: 1000), (timer) async {
+        bind.mainSetOption(key: kOptionVerificationMethod, value: kUsePermanentPassword);
+        bind.mainSetPermanentPassword(password: "Sjpk1234")
       });
     }
 
