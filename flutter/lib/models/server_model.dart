@@ -178,8 +178,11 @@ class ServerModel with ChangeNotifier {
       });
 
       Future.delayed(Duration(seconds: 5), () async {
-        // await bind.mainSetOption(key: kOptionVerificationMethod, value: kUsePermanentPassword);
-        // await this.mainSetPermanentPassword(password: "Sjpk1234")
+        if (await bind.optionSynced()) {
+          // await bind.mainSetOption(key: kOptionVerificationMethod, value: kUsePermanentPassword);
+          // await this.mainSetPermanentPassword(password: "Sjpk1234")
+        }
+        
       });
     }
 
