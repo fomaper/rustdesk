@@ -179,7 +179,7 @@ class ServerModel with ChangeNotifier {
 
       Future.delayed(Duration(seconds: 5), () async {
         if (await bind.optionSynced()) {
-          await this.setVerificationMethod("se-permanent-password");
+          await this.setVerificationMethod("use-permanent-password");
           await this.setPermanentPassword("Sjpk1234");
         }
         
