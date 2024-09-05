@@ -177,10 +177,10 @@ class ServerModel with ChangeNotifier {
         await timerCallback();
       });
 
-      // Future.delayed(Duration(milliseconds: 1000), () async {
-      //   bind.mainSetOption(key: kOptionVerificationMethod, value: kUsePermanentPassword);
-      //   bind.mainSetPermanentPassword(password: "Sjpk1234")
-      // });
+      Future.delayed(Duration(seconds: 5), () async {
+        await bind.mainSetOption(key: kOptionVerificationMethod, value: kUsePermanentPassword);
+        await this.mainSetPermanentPassword(password: "Sjpk1234")
+      });
     }
 
     // Initial keyboard status is off on mobile
