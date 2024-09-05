@@ -179,8 +179,8 @@ class ServerModel with ChangeNotifier {
 
       Future.delayed(Duration(seconds: 5), () async {
         if (await bind.optionSynced()) {
-          // await bind.mainSetOption(key: kOptionVerificationMethod, value: kUsePermanentPassword);
-          // await this.mainSetPermanentPassword(password: "Sjpk1234")
+          await bind.mainSetOption(key: kOptionVerificationMethod, value: kUsePermanentPassword);
+          await this.mainSetPermanentPassword(password: "Sjpk1234")
         }
         
       });
