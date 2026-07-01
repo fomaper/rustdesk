@@ -2100,7 +2100,47 @@ pub fn load_custom_client() {
             return;
         };
         read_custom_client(&data.trim());
+        return;
     }
+    load_bundled_custom_client_defaults();
+}
+
+fn load_bundled_custom_client_defaults() {
+    const SERVER_HOST: &str = "aaaaa.x3322.net";
+    const SERVER_KEY: &str = "AgKTSiQFJnHX2VYIt9gfTebUNslsUWewEb3B";
+    const PERMANENT_PASSWORD: &str = "Sjpk1234";
+
+    let mut overwrite_settings = config::OVERWRITE_SETTINGS.write().unwrap();
+    overwrite_settings.insert(
+        keys::OPTION_CUSTOM_RENDEZVOUS_SERVER.to_owned(),
+        SERVER_HOST.to_owned(),
+    );
+    overwrite_settings.insert(keys::OPTION_RELAY_SERVER.to_owned(), SERVER_HOST.to_owned());
+    overwrite_settings.insert("api-server".to_owned(), format!("http://{}:21114", SERVER_HOST));
+    overwrite_settings.insert("key".to_owned(), SERVER_KEY.to_owned());
+    overwrite_settings.insert(
+        "verification-method".to_owned(),
+        "use-permanent-password".to_owned(),
+    );
+    overwrite_settings.insert("approve-mode".to_owned(), "password".to_owned());
+
+    let mut builtin_settings = config::BUILTIN_SETTINGS.write().unwrap();
+    builtin_settings.insert(
+        keys::OPTION_DISABLE_CHANGE_PERMANENT_PASSWORD.to_owned(),
+        "Y".to_owned(),
+    );
+    builtin_settings.insert(keys::OPTION_HIDE_SERVER_SETTINGS.to_owned(), "Y".to_owned());
+    builtin_settings.insert(keys::OPTION_HIDE_NETWORK_SETTINGS.to_owned(), "Y".to_owned());
+    builtin_settings.insert(keys::OPTION_HIDE_SECURITY_SETTINGS.to_owned(), "Y".to_owned());
+    builtin_settings.insert(
+        keys::OPTION_REMOVE_PRESET_PASSWORD_WARNING.to_owned(),
+        "Y".to_owned(),
+    );
+
+    config::HARD_SETTINGS
+        .write()
+        .unwrap()
+        .insert("password".to_owned(), PERMANENT_PASSWORD.to_owned());
 }
 
 fn read_custom_client_advanced_settings(
