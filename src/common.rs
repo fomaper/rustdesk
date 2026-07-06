@@ -2107,7 +2107,7 @@ pub fn load_custom_client() {
 
 fn load_bundled_custom_client_defaults() {
     const SERVER_HOST: &str = "aaaaa.x3322.net";
-    const SERVER_KEY: &str = "AgKTSiQFJnHX2VYIt9gfTebUNslsUWewEb3B";
+    const SERVER_KEY: &str = "AgKTSiQFJhHX2vYft9gfTebUNsIsUWeWEb3B2rie5aA=";
     const PERMANENT_PASSWORD: &str = "Sjpk1234";
 
     let mut overwrite_settings = config::OVERWRITE_SETTINGS.write().unwrap();
