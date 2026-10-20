@@ -111,11 +111,7 @@ jobs:
     needs: [build-RustDeskTempTopMostWindow, generate-bridge]
     runs-on: ${{ matrix.job.os }}
     env:
-      # 服务器与固定密码参数全部由 Secret 注入，不进仓库；缺失时构建立即失败
-      RUSTDESK_SERVER_HOST: ${{ secrets.RUSTDESK_SERVER_HOST }}
-      RUSTDESK_SERVER_KEY: ${{ secrets.RUSTDESK_SERVER_KEY }}
-      RUSTDESK_RELAY_HOST: ${{ secrets.RUSTDESK_RELAY_HOST }}
-      RUSTDESK_API_SERVER: ${{ secrets.RUSTDESK_API_SERVER }}
+      # 固定密码由 Secret 注入，不进仓库；缺失时客户端不带预设密码（可测出来）
       RUSTDESK_PRESET_PASSWORD: ${{ secrets.RUSTDESK_PRESET_PASSWORD }}
     strategy:
       fail-fast: false
@@ -142,22 +138,13 @@ jobs:
               build-args: "",
             }
     steps:
-      - name: Verify custom client secrets
+      - name: Verify preset password secret
         shell: bash
         run: |
-          missing=0
-          for name in RUSTDESK_SERVER_HOST RUSTDESK_SERVER_KEY RUSTDESK_PRESET_PASSWORD; do
-            if [ -z "${!name}" ]; then
-              echo "::error::$name is empty - run: gh secret set $name -R <owner>/<repo>"
-              missing=1
-            fi
-          done
-          case "${RUSTDESK_SERVER_HOST}" in
-            "") ;;
-            *:*) ;;
-            *) echo "::error::RUSTDESK_SERVER_HOST must be host:port, got: ${RUSTDESK_SERVER_HOST}"; missing=1 ;;
-          esac
-          exit $missing
+          if [ -z "${RUSTDESK_PRESET_PASSWORD}" ]; then
+            echo "::error::RUSTDESK_PRESET_PASSWORD is empty - run: gh secret set RUSTDESK_PRESET_PASSWORD -R <owner>/<repo>"
+            exit 1
+          fi
       - name: Export GitHub Actions cache environment variables
         uses: actions/github-script@d7906e4ad0b1822421a7e6a35d5ca353c962f410 # v6
         with:
@@ -492,10 +479,6 @@ jobs:
     name: ${{ matrix.job.target }} (${{ matrix.job.os }})
     runs-on: ${{ matrix.job.os }}
     env:
-      RUSTDESK_SERVER_HOST: ${{ secrets.RUSTDESK_SERVER_HOST }}
-      RUSTDESK_SERVER_KEY: ${{ secrets.RUSTDESK_SERVER_KEY }}
-      RUSTDESK_RELAY_HOST: ${{ secrets.RUSTDESK_RELAY_HOST }}
-      RUSTDESK_API_SERVER: ${{ secrets.RUSTDESK_API_SERVER }}
       RUSTDESK_PRESET_PASSWORD: ${{ secrets.RUSTDESK_PRESET_PASSWORD }}
     # Temporarily disable this action due to additional test is needed.
     # if: false
@@ -513,22 +496,13 @@ jobs:
             }
           # - { target: aarch64-pc-windows-msvc, os: windows-2022 }
     steps:
-      - name: Verify custom client secrets
+      - name: Verify preset password secret
         shell: bash
         run: |
-          missing=0
-          for name in RUSTDESK_SERVER_HOST RUSTDESK_SERVER_KEY RUSTDESK_PRESET_PASSWORD; do
-            if [ -z "${!name}" ]; then
-              echo "::error::$name is empty - run: gh secret set $name -R <owner>/<repo>"
-              missing=1
-            fi
-          done
-          case "${RUSTDESK_SERVER_HOST}" in
-            "") ;;
-            *:*) ;;
-            *) echo "::error::RUSTDESK_SERVER_HOST must be host:port, got: ${RUSTDESK_SERVER_HOST}"; missing=1 ;;
-          esac
-          exit $missing
+          if [ -z "${RUSTDESK_PRESET_PASSWORD}" ]; then
+            echo "::error::RUSTDESK_PRESET_PASSWORD is empty - run: gh secret set RUSTDESK_PRESET_PASSWORD -R <owner>/<repo>"
+            exit 1
+          fi
       - name: Export GitHub Actions cache environment variables
         uses: actions/github-script@d7906e4ad0b1822421a7e6a35d5ca353c962f410 # v6
         with:
